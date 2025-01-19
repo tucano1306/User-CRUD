@@ -1,0 +1,5 @@
+/* src/components/Notification/Notification.css */
+.notification {
+    position: fixed;
+    top: 1px;
+}
