@@ -1,10 +1,8 @@
+// src/components/UserForm/UserForm.jsx
 import { useState } from 'react';
 import { X } from 'lucide-react';
 import PropTypes from 'prop-types';
 import './UserForm.css';
-
-
-
 
 const UserForm = ({ user = null, onSubmit, onClose }) => {
   const [formData, setFormData] = useState({

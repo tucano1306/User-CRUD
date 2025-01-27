@@ -1,16 +1,25 @@
-
+// src/components/UserCard/UserCard.jsx
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Trash2, Edit } from 'lucide-react';
 import './UserCard.css';
 
 const UserCard = ({ user, onEdit, onDelete }) => {
-  
+  const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+
   useEffect(() => {
     console.log('UserCard received user:', user);
   }, [user]);
 
-  const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+  // Función para formatear la fecha
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const year = date.getFullYear();
+    
+    return `${month}/${day}/${year}`;
+  };
 
   const handleDeleteClick = () => {
     console.log('Delete clicked for user:', user.id);
@@ -27,7 +36,6 @@ const UserCard = ({ user, onEdit, onDelete }) => {
     setShowConfirmDelete(false);
   };
 
-  
   if (!user || !user.first_name || !user.last_name) {
     console.warn('UserCard received incomplete user data:', user);
     return <div>Error: Datos de usuario incompletos</div>;
@@ -39,7 +47,7 @@ const UserCard = ({ user, onEdit, onDelete }) => {
       <div className="user-info">
         <p className="user-email">{user.email}</p>
         <p className="user-birthday">
-          <span>Cumpleaños:</span> {user.birthday}
+          <span>Cumpleaños:</span> {formatDate(user.birthday)}
         </p>
       </div>
 
