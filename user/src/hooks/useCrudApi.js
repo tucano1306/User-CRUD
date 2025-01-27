@@ -1,13 +1,13 @@
 // src/hooks/useCrudApi.js
 import { useState, useCallback } from 'react';
 
-const BASE_URL = 'https://users-crud.academlo.tech';
+const BASE_URL = 'https://users-crud-api-production-9c59.up.railway.app/api/v1/users';
 
 const useCrudApi = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const handleRequest = useCallback(async (endpoint, options = {}) => {
+  const handleRequest = useCallback(async (endpoint = '', options = {}) => {
     setLoading(true);
     setError(null);
     
@@ -35,42 +35,35 @@ const useCrudApi = () => {
     }
   }, []);
 
-  // GET request
+  // GET - Obtener todos los usuarios
   const getAll = useCallback(async () => {
-    return handleRequest('/users/');
+    return handleRequest();
   }, [handleRequest]);
 
+  // GET - Obtener un usuario por ID
   const getById = useCallback(async (id) => {
-    return handleRequest(`/users/${id}/`);
+    return handleRequest(`/${id}`);
   }, [handleRequest]);
 
-  // POST request
+  // POST - Crear un nuevo usuario
   const createUser = useCallback(async (userData) => {
-    return handleRequest('/users/', {
+    return handleRequest('', {
       method: 'POST',
       body: JSON.stringify(userData)
     });
   }, [handleRequest]);
 
-  // PUT request
+  // PUT - Actualizar un usuario
   const updateUser = useCallback(async (id, userData) => {
-    return handleRequest(`/users/${id}/`, {
+    return handleRequest(`/${id}`, {
       method: 'PUT',
       body: JSON.stringify(userData)
     });
   }, [handleRequest]);
 
-  // PATCH request
-  const patchUser = useCallback(async (id, partialData) => {
-    return handleRequest(`/users/${id}/`, {
-      method: 'PATCH',
-      body: JSON.stringify(partialData)
-    });
-  }, [handleRequest]);
-
-  // DELETE request
+  // DELETE - Eliminar un usuario
   const deleteUser = useCallback(async (id) => {
-    return handleRequest(`/users/${id}/`, {
+    return handleRequest(`/${id}`, {
       method: 'DELETE'
     });
   }, [handleRequest]);
@@ -82,7 +75,6 @@ const useCrudApi = () => {
     getById,
     createUser,
     updateUser,
-    patchUser,
     deleteUser
   };
 };

@@ -1,17 +1,24 @@
-// src/components/UserCard/UserCard.jsx
-import { useState } from 'react';
+
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Trash2, Edit } from 'lucide-react';
 import './UserCard.css';
 
 const UserCard = ({ user, onEdit, onDelete }) => {
+  
+  useEffect(() => {
+    console.log('UserCard received user:', user);
+  }, [user]);
+
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
 
   const handleDeleteClick = () => {
+    console.log('Delete clicked for user:', user.id);
     setShowConfirmDelete(true);
   };
 
   const handleConfirmDelete = () => {
+    console.log('Confirming delete for user:', user.id);
     onDelete(user.id);
     setShowConfirmDelete(false);
   };
@@ -19,6 +26,12 @@ const UserCard = ({ user, onEdit, onDelete }) => {
   const handleCancelDelete = () => {
     setShowConfirmDelete(false);
   };
+
+  
+  if (!user || !user.first_name || !user.last_name) {
+    console.warn('UserCard received incomplete user data:', user);
+    return <div>Error: Datos de usuario incompletos</div>;
+  }
 
   return (
     <div className="user-card">
@@ -31,7 +44,7 @@ const UserCard = ({ user, onEdit, onDelete }) => {
       </div>
 
       <div className="user-actions">
-        <button 
+        <button
           className="action-button edit"
           onClick={() => onEdit(user)}
           title="Editar usuario"
@@ -40,7 +53,7 @@ const UserCard = ({ user, onEdit, onDelete }) => {
           <span>Editar</span>
         </button>
         
-        <button 
+        <button
           className="action-button delete"
           onClick={handleDeleteClick}
           title="Eliminar usuario"
@@ -54,13 +67,13 @@ const UserCard = ({ user, onEdit, onDelete }) => {
         <div className="delete-confirmation">
           <p>¿Estás seguro de que deseas eliminar este usuario?</p>
           <div className="confirmation-buttons">
-            <button 
+            <button
               className="confirm-button"
               onClick={handleConfirmDelete}
             >
               Sí, eliminar
             </button>
-            <button 
+            <button
               className="cancel-button"
               onClick={handleCancelDelete}
             >

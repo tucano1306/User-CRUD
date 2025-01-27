@@ -1,4 +1,3 @@
-// src/App.jsx
 import { useState, useEffect, useCallback } from 'react';
 import UserCard from './components/UserCard/UserCard';
 import UserForm from './components/UserForm/UserForm';
@@ -7,6 +6,7 @@ import useCrudApi from './hooks/useCrudApi';
 import './App.css';
 
 function App() {
+  
   const [users, setUsers] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -15,6 +15,7 @@ function App() {
     message: ''
   });
 
+  
   const { 
     loading, 
     getAll, 
@@ -23,6 +24,7 @@ function App() {
     deleteUser 
   } = useCrudApi();
 
+  
   const showModal = (message) => {
     setModal({
       isOpen: true,
@@ -37,52 +39,77 @@ function App() {
     });
   };
 
+  
   const loadUsers = useCallback(async () => {
-    const { data, error: apiError } = await getAll();
-    if (apiError) {
+    try {
+      const { data } = await getAll();
+      console.log('Usuarios cargados:', data);
+      
+      if (data && data.results) {
+        setUsers(data.results);
+        console.log('Users state updated:', data.results);
+      } else {
+        console.warn('Estructura de datos inesperada:', data);
+        setUsers([]);
+      }
+    } catch (error) {
+      console.error('Error al cargar usuarios:', error);
       showModal('Error al cargar los usuarios');
-    } else {
-      setUsers(data);
+      setUsers([]);
     }
   }, [getAll]);
 
+  
   useEffect(() => {
     loadUsers();
   }, [loadUsers]);
 
+  
   const handleCreate = async (userData) => {
-    const { error: apiError } = await createUser(userData);
-    
-    if (apiError) {
+    try {
+      const { error: apiError } = await createUser(userData);
+      if (apiError) {
+        showModal('Error al crear el usuario');
+      } else {
+        await loadUsers();
+        setShowForm(false);
+        showModal('Usuario creado exitosamente');
+      }
+    } catch (error) {
+      console.error('Error al crear usuario:', error);
       showModal('Error al crear el usuario');
-    } else {
-      await loadUsers();
-      setShowForm(false);
-      showModal('El usuario Juan José Mosquera Gómez se ha agregado');
     }
   };
 
   const handleUpdate = async (userData) => {
-    const { error: apiError } = await updateUser(selectedUser.id, userData);
-    
-    if (apiError) {
+    try {
+      const { error: apiError } = await updateUser(selectedUser.id, userData);
+      if (apiError) {
+        showModal('Error al actualizar el usuario');
+      } else {
+        await loadUsers();
+        setShowForm(false);
+        setSelectedUser(null);
+        showModal('Usuario actualizado exitosamente');
+      }
+    } catch (error) {
+      console.error('Error al actualizar usuario:', error);
       showModal('Error al actualizar el usuario');
-    } else {
-      await loadUsers();
-      setShowForm(false);
-      setSelectedUser(null);
-      showModal('El usuario se ha actualizado exitosamente');
     }
   };
 
   const handleDelete = async (userId) => {
-    const { error: apiError } = await deleteUser(userId);
-    
-    if (apiError) {
+    try {
+      const { error: apiError } = await deleteUser(userId);
+      if (apiError) {
+        showModal('Error al eliminar el usuario');
+      } else {
+        await loadUsers();
+        showModal('Usuario eliminado exitosamente');
+      }
+    } catch (error) {
+      console.error('Error al eliminar usuario:', error);
       showModal('Error al eliminar el usuario');
-    } else {
-      await loadUsers();
-      showModal('El usuario Juan José Mosquera Gómez se ha eliminado');
     }
   };
 
@@ -91,18 +118,19 @@ function App() {
     setShowForm(true);
   };
 
-  const handleClose = () => {
+  const handleCloseForm = () => {
     setShowForm(false);
     setSelectedUser(null);
   };
 
-  const handleSubmit = (userData) => {
-    if (selectedUser) {
-      handleUpdate(userData);
-    } else {
-      handleCreate(userData);
-    }
-  };
+  
+  if (loading && users.length === 0) {
+    return (
+      <div className="loading-container">
+        <div className="loading">Cargando usuarios...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="app">
@@ -113,26 +141,30 @@ function App() {
           onClick={() => setShowForm(true)}
           disabled={loading}
         >
-          Crear nuevo usuario
+          + Crear nuevo usuario
         </button>
       </div>
 
       <div className="users-container">
-        {users.map(user => (
-          <UserCard
-            key={user.id}
-            user={user}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-          />
-        ))}
+        {users && users.length > 0 ? (
+          users.map(user => (
+            <UserCard
+              key={user.id}
+              user={user}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+            />
+          ))
+        ) : (
+          <div className="no-users">No hay usuarios para mostrar</div>
+        )}
       </div>
 
       {showForm && (
         <UserForm
           user={selectedUser}
-          onSubmit={handleSubmit}
-          onClose={handleClose}
+          onSubmit={selectedUser ? handleUpdate : handleCreate}
+          onClose={handleCloseForm}
           disabled={loading}
         />
       )}

@@ -1,4 +1,3 @@
-/* src/components/UserCard/UserCard.css */
 .user-card {
     background: white;
     border: 1px solid #e5e7eb;
@@ -55,7 +54,7 @@
     background-color: #dbeafe;
   }
 
-  /* src/components/UserCard/UserCard.css */
+  
 .user-card {
     position: relative;
     background: white;

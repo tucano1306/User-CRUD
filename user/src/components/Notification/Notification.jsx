@@ -1,4 +1,3 @@
-// src/components/Notification/Notification.jsx
 import { AlertCircle } from 'lucide-react';
 import PropTypes from 'prop-types';
 import './Notification.css';

@@ -1,8 +1,5 @@
-// src/services/api.js
-
 const API_BASE_URL = 'YOUR_API_BASE_URL';
 
-// Helper para manejar errores de fetch
 const handleFetchErrors = async (response) => {
   if (!response.ok) {
     const error = await response.text();
