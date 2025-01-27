@@ -1,4 +1,3 @@
-// src/components/UserForm/UserForm.jsx
 import { useState } from 'react';
 import { X } from 'lucide-react';
 import PropTypes from 'prop-types';

@@ -1,4 +1,3 @@
-// src/hooks/useCrudApi.js
 import { useState, useCallback } from 'react';
 
 const BASE_URL = 'https://users-crud-api-production-9c59.up.railway.app/api/v1/users';
@@ -35,17 +34,17 @@ const useCrudApi = () => {
     }
   }, []);
 
-  // GET - Obtener todos los usuarios
+  
   const getAll = useCallback(async () => {
     return handleRequest();
   }, [handleRequest]);
 
-  // GET - Obtener un usuario por ID
+  
   const getById = useCallback(async (id) => {
     return handleRequest(`/${id}`);
   }, [handleRequest]);
 
-  // POST - Crear un nuevo usuario
+  
   const createUser = useCallback(async (userData) => {
     return handleRequest('', {
       method: 'POST',
@@ -53,7 +52,7 @@ const useCrudApi = () => {
     });
   }, [handleRequest]);
 
-  // PUT - Actualizar un usuario
+  
   const updateUser = useCallback(async (id, userData) => {
     return handleRequest(`/${id}`, {
       method: 'PUT',
@@ -61,7 +60,7 @@ const useCrudApi = () => {
     });
   }, [handleRequest]);
 
-  // DELETE - Eliminar un usuario
+  
   const deleteUser = useCallback(async (id) => {
     return handleRequest(`/${id}`, {
       method: 'DELETE'
