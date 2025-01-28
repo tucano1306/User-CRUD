@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Trash2, Edit } from 'lucide-react';
 import './UserCard.css';
@@ -6,47 +6,42 @@ import './UserCard.css';
 const UserCard = ({ user, onEdit, onDelete }) => {
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
 
-  useEffect(() => {
-    console.log('UserCard received user:', user);
-  }, [user]);
-
-    const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    const year = date.getFullYear();
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
     
-    return `${month}/${day}/${year}`;
+    try {
+      
+      const cleanDate = dateString.split('T')[0];
+      
+      
+      const [year, month, day] = cleanDate.split('-');
+      
+      
+      if (!year || !month || !day) return '';
+      
+      
+      return `${month}/${day}/${year}`;
+    } catch (error) {
+      console.error('Error formatting date:', error);
+      return '';
+    }
   };
-
-  const handleDeleteClick = () => {
-    console.log('Delete clicked for user:', user.id);
-    setShowConfirmDelete(true);
-  };
-
-  const handleConfirmDelete = () => {
-    console.log('Confirming delete for user:', user.id);
-    onDelete(user.id);
-    setShowConfirmDelete(false);
-  };
-
-  const handleCancelDelete = () => {
-    setShowConfirmDelete(false);
-  };
-
-  if (!user || !user.first_name || !user.last_name) {
-    console.warn('UserCard received incomplete user data:', user);
-    return <div>Error: Datos de usuario incompletos</div>;
-  }
 
   return (
     <div className="user-card">
       <h3 className="user-name">{`${user.first_name} ${user.last_name}`}</h3>
       <div className="user-info">
-        <p className="user-email">{user.email}</p>
-        <p className="user-birthday">
-          <span>Cumpleaños:</span> {formatDate(user.birthday)}
-        </p>
+        <div className="email-group">
+          <span className="info-label">Correo electrónico:</span>
+          <p className="user-email">{user.email}</p>
+        </div>
+        <div className="birthday-group">
+          <span className="info-label">Cumpleaños:</span>
+          <p className="user-birthday">
+            <span className="birthday-emoji">🎂</span>
+            {formatDate(user.birthday)}
+          </p>
+        </div>
       </div>
 
       <div className="user-actions">
@@ -61,7 +56,7 @@ const UserCard = ({ user, onEdit, onDelete }) => {
         
         <button
           className="action-button delete"
-          onClick={handleDeleteClick}
+          onClick={() => setShowConfirmDelete(true)}
           title="Eliminar usuario"
         >
           <Trash2 />
@@ -75,13 +70,16 @@ const UserCard = ({ user, onEdit, onDelete }) => {
           <div className="confirmation-buttons">
             <button
               className="confirm-button"
-              onClick={handleConfirmDelete}
+              onClick={() => {
+                onDelete(user.id);
+                setShowConfirmDelete(false);
+              }}
             >
               Sí, eliminar
             </button>
             <button
               className="cancel-button"
-              onClick={handleCancelDelete}
+              onClick={() => setShowConfirmDelete(false)}
             >
               Cancelar
             </button>

@@ -6,15 +6,17 @@
 
 .app-header {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
   margin-bottom: 2rem;
+  gap: 1rem;
 }
 
 .app-header h1 {
   color: #0F0F2D;
   font-size: 2rem;
   font-weight: 500;
+  text-align: center;
   margin: 0;
 }
 
@@ -27,9 +29,7 @@
   font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.2s;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  align-self: flex-end;
 }
 
 .create-button:hover:not(:disabled) {
@@ -46,6 +46,12 @@
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.5rem;
   padding: 1rem 0;
+}
+
+@media (max-width: 768px) {
+  .create-button {
+    align-self: center;
+  }
 }
 
 .loading-container {
@@ -100,5 +106,186 @@
   .create-button {
     width: 100%;
     justify-content: center;
+  }
+}
+
+
+.user-card {
+  background: white;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.user-name {
+  color: #0F0F2D;
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.email-group, .birthday-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.info-label {
+  color: #999;
+  font-size: 0.875rem;
+}
+
+.user-email {
+  color: #666;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.user-birthday {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #666;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.birthday-emoji {
+  font-size: 1.1rem;
+}
+
+.user-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  justify-content: flex-end;
+}
+
+.action-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.action-button.edit {
+  background-color: #E8F2FF;
+  color: #2563EB;
+}
+
+.action-button.edit:hover {
+  background-color: #DBEAFE;
+}
+
+.action-button.delete {
+  background-color: #FEE2E2;
+  color: #DC2626;
+}
+
+.action-button.delete:hover {
+  background-color: #FECACA;
+}
+
+.delete-confirmation {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.95);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.confirmation-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.confirm-button, .cancel-button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.confirm-button {
+  background-color: #DC2626;
+  color: white;
+}
+
+.cancel-button {
+  background-color: #E5E7EB;
+  color: #374151;
+}
+
+@media screen and (max-width: 480px) {
+  .app {
+    padding: 1rem 0.5rem;
+  }
+
+  .app-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .create-button {
+    width: 100%;
+    align-self: center;
+  }
+
+  .users-container {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+
+@media screen and (min-width: 481px) and (max-width: 768px) {
+  .users-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .create-button {
+    align-self: center;
+  }
+}
+
+
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  .users-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+}
+
+@media screen and (min-width: 1025px) {
+  .users-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+
+@media screen and (min-width: 1440px) {
+  .app {
+    max-width: 1400px;
+  }
+
+  .users-container {
+    grid-template-columns: repeat(4, 1fr);
   }
 }
